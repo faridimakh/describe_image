@@ -1,0 +1,7 @@
+version: '3'
+services:
+  web:
+    container_name: web_app
+    build: ./web_app
+    ports:
+      - "5000:5000"

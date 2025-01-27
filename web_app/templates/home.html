@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Captioning with Preview</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            display: none;
+        }
+        textarea {
+            width: 80%;
+            height: 100px;
+            margin-top: 20px;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<h1>Charger votre image ici et cliquer sur décrire</h1>
+<form id="uploadForm">
+    <input type="file" id="imageInput" name="image" accept="image/*">
+    <div id="previewContainer">
+        <img id="previewImage" alt="Selected image preview">
+    </div>
+    <button type="submit">décrire</button>
+</form>
+<div id="results" style="margin-top: 20px;">
+    <h2>Results</h2>
+    <p><strong>Description en anglais :</strong> <span id="descriptionEn"></span></p>
+    <p><strong>Traduction en français :</strong> <span id="descriptionFr"></span></p>
+</div>
+
+<script>
+    const imageInput = document.getElementById('imageInput');
+    const previewImage = document.getElementById('previewImage');
+    const form = document.getElementById('uploadForm');
+    const descriptionEn = document.getElementById('descriptionEn');
+    const descriptionFr = document.getElementById('descriptionFr');
+
+    // Show preview of selected image
+    imageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImage.src = e.target.result;
+                previewImage.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewImage.style.display = 'none';
+        }
+    });
+
+    // Handle form submission
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const response = await fetch('/predict', {
+            method: 'POST',
+            body: formData
+        });
+        const result = await response.json();
+
+        if (response.ok) {
+            descriptionEn.textContent = result.description_en;
+            descriptionFr.textContent = result.description_fr;
+        } else {
+            alert(result.error || 'An error occurred.');
+        }
+    });
+</script>
+</body>
+</html>

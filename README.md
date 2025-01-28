@@ -3,7 +3,7 @@
 
 1-install docker and docker-compose in your computer (google)
 
-2- pull th project (**web repository and docker-compose.xml file  must be in the same directory**)
+2- go to describe_image (**cd describe_image**)
 
 3- run the docker commands: ***docker-compos build***, ***docker-compose up -d***
 

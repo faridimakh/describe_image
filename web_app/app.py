@@ -59,6 +59,3 @@ def predict():
 if __name__ == '__main__':
     os.makedirs("../uploads", exist_ok=True)
     app.run(host='0.0.0.0')
-# pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
-# pip install sentencepiece
-# pip install pillow
